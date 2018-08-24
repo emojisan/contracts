@@ -16,7 +16,6 @@ contract Emojisan {
     address public minter;
     mapping (bytes4 => bool) public supportsInterface;
     mapping (uint => address) private tokenToOwner;
-    uint public totalSupply;
     uint[] public tokenByIndex;
     mapping (address => uint[]) public tokenOfOwnerByIndex;
     mapping (address => mapping (uint => uint)) private indexInTokenOfOwnerByIndex;
@@ -43,6 +42,10 @@ contract Emojisan {
 
     function tokensOfOwner(address owner) external view returns (uint[]) {
         return tokenOfOwnerByIndex[owner];
+    }
+
+    function totalSupply() external view returns (uint) {
+        return tokenByIndex.length;
     }
 
     function balanceOf(address owner) external view returns (uint) {
@@ -128,7 +131,6 @@ contract Emojisan {
         require(msg.sender == minter);
         require(tokenToOwner[tokenId] == 0);
         tokenToOwner[tokenId] = msg.sender;
-        totalSupply++;
         tokenByIndex.push(tokenId);
         uint length = tokenOfOwnerByIndex[msg.sender].push(tokenId);
         indexInTokenOfOwnerByIndex[msg.sender][tokenId] = length - 1;
